@@ -1,0 +1,5 @@
+config LIBLVGL
+	   bool "lvgl: LittlevGL Embedded GUI Library"
+	   default n
+	   select LIBNEWLIBC
+

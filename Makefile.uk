@@ -1,0 +1,203 @@
+#  liblvgl Makefile.uk
+#
+#  Authors: Felipe Huici <felipe.huici@neclab.eu>
+#
+#
+#  Copyright (c) 2019, NEC Europe Ltd., NEC Corporation. All rights reserved.
+#
+#  Redistribution and use in source and binary forms, with or without
+#  modification, are permitted provided that the following conditions
+#  are met:
+#
+#  1. Redistributions of source code must retain the above copyright
+#     notice, this list of conditions and the following disclaimer.
+#  2. Redistributions in binary form must reproduce the above copyright
+#     notice, this list of conditions and the following disclaimer in the
+#     documentation and/or other materials provided with the distribution.
+#  3. Neither the name of the copyright holder nor the names of its
+#     contributors may be used to endorse or promote products derived from
+#     this software without specific prior written permission.
+#
+#  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+#  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+#  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+#  ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+#  LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+#  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+#  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+#  INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+#  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+#  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+#  POSSIBILITY OF SUCH DAMAGE.
+#
+#  THIS HEADER MAY NOT BE EXTRACTED OR MODIFIED IN ANY WAY.
+#
+
+################################################################################
+# Library registration
+################################################################################
+$(eval $(call addlib_s,liblvgl,$(CONFIG_LIBLVGL)))
+
+################################################################################
+# Original sources
+################################################################################
+LIBLVGL_VERSION=3429e58d3c40efa47201e03382cbcec1e65d9882
+LIBLVGL_URL=https://github.com/littlevgl/lvgl/archive/$(LIBLVGL_VERSION).zip
+LIBLVGL_DIR=lvgl-$(LIBLVGL_VERSION)
+
+$(eval $(call fetch,liblvgl,$(LIBLVGL_URL),lvgl-$(LIBLVGL_VERSION).zip))
+
+################################################################################
+# Helpers
+################################################################################
+LIBLVGL_EXTRACTED=$(LIBLVGL_ORIGIN)/$(LIBLVGL_DIR)
+
+################################################################################
+# Library includes
+################################################################################
+LIBLVGL_INCLUDES += -I$(LIBLVGL_BASE)/include            \
+		    -I$(LIBLVGL_EXTRACTED)               \
+		    -I$(LIBLVGL_EXTRACTED)/porting       \
+		    -I$(LIBLVGL_EXTRACTED)/src           \
+		    -I$(LIBLVGL_EXTRACTED)/src/lv_core   \
+		    -I$(LIBLVGL_EXTRACTED)/src/lv_themes \
+		    -I$(LIBLVGL_EXTRACTED)/src/lv_draw   \
+		    -I$(LIBLVGL_EXTRACTED)/src/lv_font   \
+		    -I$(LIBLVGL_EXTRACTED)/src/lv_hal    \
+		    -I$(LIBLVGL_EXTRACTED)/lv_misc       \
+		    -I$(LIBLVGL_EXTRACTED)/src/lv_objx   \
+
+CINCLUDES-$(CONFIG_LIBLVGL)   += $(LIBLVGL_INCLUDES)
+CXXINCLUDES-$(CONFIG_LIBLVGL) += $(LIBLVGL_INCLUDES)
+
+################################################################################
+# Global flags
+################################################################################
+LIBLVGL_FLAGS = -DLV_CONF_INCLUDE_SIMPLE
+LIBLVGL_SUPPRESS_FLAGS += -Wno-unused-parameter -Wno-unused-value
+
+LIBLVGL_CFLAGS-y     += $(LIBLVGL_FLAGS)          \
+		        $(LIBLVGL_SUPPRESS_FLAGS)
+
+################################################################################
+# Sources - porting
+################################################################################
+LIBLVGL_SRCS-y += $(LIBLVGL_EXTRACTED)/porting/lv_port_fs_template.c
+LIBLVGL_SRCS-y += $(LIBLVGL_EXTRACTED)/porting/lv_port_indev_template.c
+LIBLVGL_SRCS-y += $(LIBLVGL_EXTRACTED)/porting/lv_port_disp_template.c
+
+################################################################################
+# Sources - themes
+################################################################################
+LIBLVGL_SRCS-y += $(LIBLVGL_EXTRACTED)/src/lv_themes/lv_theme_zen.c
+LIBLVGL_SRCS-y += $(LIBLVGL_EXTRACTED)/src/lv_themes/lv_theme_default.c
+LIBLVGL_SRCS-y += $(LIBLVGL_EXTRACTED)/src/lv_themes/lv_theme_nemo.c
+LIBLVGL_SRCS-y += $(LIBLVGL_EXTRACTED)/src/lv_themes/lv_theme.c
+LIBLVGL_SRCS-y += $(LIBLVGL_EXTRACTED)/src/lv_themes/lv_theme_night.c
+LIBLVGL_SRCS-y += $(LIBLVGL_EXTRACTED)/src/lv_themes/lv_theme_alien.c
+LIBLVGL_SRCS-y += $(LIBLVGL_EXTRACTED)/src/lv_themes/lv_theme_mono.c
+LIBLVGL_SRCS-y += $(LIBLVGL_EXTRACTED)/src/lv_themes/lv_theme_material.c
+LIBLVGL_SRCS-y += $(LIBLVGL_EXTRACTED)/src/lv_themes/lv_theme_templ.c
+
+################################################################################
+# Sources - draw
+################################################################################
+LIBLVGL_SRCS-y += $(LIBLVGL_EXTRACTED)/src/lv_draw/lv_img_decoder.c
+LIBLVGL_SRCS-y += $(LIBLVGL_EXTRACTED)/src/lv_draw/lv_draw_line.c
+LIBLVGL_SRCS-y += $(LIBLVGL_EXTRACTED)/src/lv_draw/lv_draw_arc.c
+LIBLVGL_SRCS-y += $(LIBLVGL_EXTRACTED)/src/lv_draw/lv_draw_label.c
+LIBLVGL_SRCS-y += $(LIBLVGL_EXTRACTED)/src/lv_draw/lv_draw.c
+LIBLVGL_SRCS-y += $(LIBLVGL_EXTRACTED)/src/lv_draw/lv_draw_img.c
+LIBLVGL_SRCS-y += $(LIBLVGL_EXTRACTED)/src/lv_draw/lv_draw_rect.c
+LIBLVGL_SRCS-y += $(LIBLVGL_EXTRACTED)/src/lv_draw/lv_img_cache.c
+LIBLVGL_SRCS-y += $(LIBLVGL_EXTRACTED)/src/lv_draw/lv_draw_basic.c
+LIBLVGL_SRCS-y += $(LIBLVGL_EXTRACTED)/src/lv_draw/lv_draw_triangle.c
+
+################################################################################
+# Sources - font
+################################################################################
+LIBLVGL_SRCS-y += $(LIBLVGL_EXTRACTED)/src/lv_font/lv_font_roboto_22.c
+LIBLVGL_SRCS-y += $(LIBLVGL_EXTRACTED)/src/lv_font/lv_font_fmt_txt.c
+LIBLVGL_SRCS-y += $(LIBLVGL_EXTRACTED)/src/lv_font/lv_font_roboto_12.c
+LIBLVGL_SRCS-y += $(LIBLVGL_EXTRACTED)/src/lv_font/lv_font_unscii_8.c
+LIBLVGL_SRCS-y += $(LIBLVGL_EXTRACTED)/src/lv_font/lv_font_roboto_16.c
+LIBLVGL_SRCS-y += $(LIBLVGL_EXTRACTED)/src/lv_font/lv_font_roboto_12_subpx.c
+LIBLVGL_SRCS-y += $(LIBLVGL_EXTRACTED)/src/lv_font/lv_font_roboto_28.c
+LIBLVGL_SRCS-y += $(LIBLVGL_EXTRACTED)/src/lv_font/lv_font_roboto_28_compressed.c
+LIBLVGL_SRCS-y += $(LIBLVGL_EXTRACTED)/src/lv_font/lv_font.c
+
+################################################################################
+# Sources - hal
+################################################################################
+LIBLVGL_SRCS-y += $(LIBLVGL_EXTRACTED)/src/lv_hal/lv_hal_indev.c
+LIBLVGL_SRCS-y += $(LIBLVGL_EXTRACTED)/src/lv_hal/lv_hal_disp.c
+LIBLVGL_SRCS-y += $(LIBLVGL_EXTRACTED)/src/lv_hal/lv_hal_tick.c
+
+################################################################################
+# Sources - misc
+################################################################################
+LIBLVGL_SRCS-y += $(LIBLVGL_EXTRACTED)/src/lv_misc/lv_anim.c
+LIBLVGL_SRCS-y += $(LIBLVGL_EXTRACTED)/src/lv_misc/lv_circ.c
+LIBLVGL_SRCS-y += $(LIBLVGL_EXTRACTED)/src/lv_misc/lv_area.c
+LIBLVGL_SRCS-y += $(LIBLVGL_EXTRACTED)/src/lv_misc/lv_math.c
+LIBLVGL_SRCS-y += $(LIBLVGL_EXTRACTED)/src/lv_misc/lv_utils.c
+LIBLVGL_SRCS-y += $(LIBLVGL_EXTRACTED)/src/lv_misc/lv_async.c
+LIBLVGL_SRCS-y += $(LIBLVGL_EXTRACTED)/src/lv_misc/lv_fs.c
+LIBLVGL_SRCS-y += $(LIBLVGL_EXTRACTED)/src/lv_misc/lv_ll.c
+LIBLVGL_SRCS-y += $(LIBLVGL_EXTRACTED)/src/lv_misc/lv_task.c
+LIBLVGL_SRCS-y += $(LIBLVGL_EXTRACTED)/src/lv_misc/lv_color.c
+LIBLVGL_SRCS-y += $(LIBLVGL_EXTRACTED)/src/lv_misc/lv_templ.c
+LIBLVGL_SRCS-y += $(LIBLVGL_EXTRACTED)/src/lv_misc/lv_log.c
+LIBLVGL_SRCS-y += $(LIBLVGL_EXTRACTED)/src/lv_misc/lv_txt.c
+LIBLVGL_SRCS-y += $(LIBLVGL_EXTRACTED)/src/lv_misc/lv_bidi.c
+LIBLVGL_SRCS-y += $(LIBLVGL_EXTRACTED)/src/lv_misc/lv_printf.c
+LIBLVGL_SRCS-y += $(LIBLVGL_EXTRACTED)/src/lv_misc/lv_mem.c
+LIBLVGL_SRCS-y += $(LIBLVGL_EXTRACTED)/src/lv_misc/lv_gc.c
+
+################################################################################
+# Sources - objx
+################################################################################
+LIBLVGL_SRCS-y += $(LIBLVGL_EXTRACTED)/src/lv_objx/lv_bar.c
+LIBLVGL_SRCS-y += $(LIBLVGL_EXTRACTED)/src/lv_objx/lv_calendar.c
+LIBLVGL_SRCS-y += $(LIBLVGL_EXTRACTED)/src/lv_objx/lv_img.c
+LIBLVGL_SRCS-y += $(LIBLVGL_EXTRACTED)/src/lv_objx/lv_tabview.c
+LIBLVGL_SRCS-y += $(LIBLVGL_EXTRACTED)/src/lv_objx/lv_ta.c
+LIBLVGL_SRCS-y += $(LIBLVGL_EXTRACTED)/src/lv_objx/lv_cpicker.c
+LIBLVGL_SRCS-y += $(LIBLVGL_EXTRACTED)/src/lv_objx/lv_objx_templ.c
+LIBLVGL_SRCS-y += $(LIBLVGL_EXTRACTED)/src/lv_objx/lv_label.c
+LIBLVGL_SRCS-y += $(LIBLVGL_EXTRACTED)/src/lv_objx/lv_led.c
+LIBLVGL_SRCS-y += $(LIBLVGL_EXTRACTED)/src/lv_objx/lv_arc.c
+LIBLVGL_SRCS-y += $(LIBLVGL_EXTRACTED)/src/lv_objx/lv_tileview.c
+LIBLVGL_SRCS-y += $(LIBLVGL_EXTRACTED)/src/lv_objx/lv_cb.c
+LIBLVGL_SRCS-y += $(LIBLVGL_EXTRACTED)/src/lv_objx/lv_slider.c
+LIBLVGL_SRCS-y += $(LIBLVGL_EXTRACTED)/src/lv_objx/lv_table.c
+LIBLVGL_SRCS-y += $(LIBLVGL_EXTRACTED)/src/lv_objx/lv_page.c
+LIBLVGL_SRCS-y += $(LIBLVGL_EXTRACTED)/src/lv_objx/lv_kb.c
+LIBLVGL_SRCS-y += $(LIBLVGL_EXTRACTED)/src/lv_objx/lv_line.c
+LIBLVGL_SRCS-y += $(LIBLVGL_EXTRACTED)/src/lv_objx/lv_mbox.c
+LIBLVGL_SRCS-y += $(LIBLVGL_EXTRACTED)/src/lv_objx/lv_preload.c
+LIBLVGL_SRCS-y += $(LIBLVGL_EXTRACTED)/src/lv_objx/lv_imgbtn.c
+LIBLVGL_SRCS-y += $(LIBLVGL_EXTRACTED)/src/lv_objx/lv_ddlist.c
+LIBLVGL_SRCS-y += $(LIBLVGL_EXTRACTED)/src/lv_objx/lv_lmeter.c
+LIBLVGL_SRCS-y += $(LIBLVGL_EXTRACTED)/src/lv_objx/lv_spinbox.c
+LIBLVGL_SRCS-y += $(LIBLVGL_EXTRACTED)/src/lv_objx/lv_btn.c
+LIBLVGL_SRCS-y += $(LIBLVGL_EXTRACTED)/src/lv_objx/lv_canvas.c
+LIBLVGL_SRCS-y += $(LIBLVGL_EXTRACTED)/src/lv_objx/lv_gauge.c
+LIBLVGL_SRCS-y += $(LIBLVGL_EXTRACTED)/src/lv_objx/lv_sw.c
+LIBLVGL_SRCS-y += $(LIBLVGL_EXTRACTED)/src/lv_objx/lv_btnm.c
+LIBLVGL_SRCS-y += $(LIBLVGL_EXTRACTED)/src/lv_objx/lv_win.c
+LIBLVGL_SRCS-y += $(LIBLVGL_EXTRACTED)/src/lv_objx/lv_roller.c
+LIBLVGL_SRCS-y += $(LIBLVGL_EXTRACTED)/src/lv_objx/lv_list.c
+LIBLVGL_SRCS-y += $(LIBLVGL_EXTRACTED)/src/lv_objx/lv_chart.c
+LIBLVGL_SRCS-y += $(LIBLVGL_EXTRACTED)/src/lv_objx/lv_cont.c
+
+################################################################################
+# Sources - core
+################################################################################
+LIBLVGL_SRCS-y += $(LIBLVGL_EXTRACTED)/src/lv_core/lv_obj.c
+LIBLVGL_SRCS-y += $(LIBLVGL_EXTRACTED)/src/lv_core/lv_debug.c
+LIBLVGL_SRCS-y += $(LIBLVGL_EXTRACTED)/src/lv_core/lv_disp.c
+LIBLVGL_SRCS-y += $(LIBLVGL_EXTRACTED)/src/lv_core/lv_style.c
+LIBLVGL_SRCS-y += $(LIBLVGL_EXTRACTED)/src/lv_core/lv_indev.c
+LIBLVGL_SRCS-y += $(LIBLVGL_EXTRACTED)/src/lv_core/lv_refr.c
+LIBLVGL_SRCS-y += $(LIBLVGL_EXTRACTED)/src/lv_core/lv_group.c
