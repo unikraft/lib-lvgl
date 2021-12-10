@@ -74,7 +74,7 @@ CXXINCLUDES-$(CONFIG_LIBLVGL) += $(LIBLVGL_INCLUDES)
 LIBLVGL_FLAGS = -DLV_CONF_INCLUDE_SIMPLE
 LIBLVGL_SUPPRESS_FLAGS += -Wno-unused-parameter -Wno-unused-value
 
-LIBLVGL_CFLAGS-y     += $(LIBLVGL_FLAGS)          \
+CFLAGS-y     += $(LIBLVGL_FLAGS)          \
 		        $(LIBLVGL_SUPPRESS_FLAGS)
 
 ################################################################################
