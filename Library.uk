@@ -1,0 +1,6 @@
+name        := "lvgl"
+description := "An open-source Embedded GUI Library."
+gitrepo     := "https://github.com/littlevgl/lvgl.git"
+homepage    := "https://littlevgl.com"
+license     := "MIT"
+version     := 3429e58 sha256:50f6a3620e119e29357b88d2e692c4bafcb6ff8d2fd7c9c668dd27bb6a49e48c https://github.com/littlevgl/lvgl/archive/3429e58.tar.gz
